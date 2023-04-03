@@ -31,10 +31,10 @@ const Home = () => {
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
+              <th scope="col">Driver Name</th>
               <th scope="col">Phone</th>
-              <th scope="col">City</th>
-              <th scope="col">Type</th>
+              <th scope="col">Vehicle Number</th>
+              <th scope="col">Vehicle Type</th>
               <th scope="col">Route</th>
               <th scope="col">Cost</th>
               <th scope="col">Status</th>
@@ -45,9 +45,9 @@ const Home = () => {
             {users.map((user, index) => (
               <tr>
                 <th scope="row">{index + 1}</th>
-                <td>{user.name}</td>
+                <td>{user.driverName}</td>
                 <td>{user.no}</td>
-                <td>{user.city}</td>
+                <td>{user.vehicleNumber}</td>
                 <td>{user.vehicleType}</td>
                 <td>{user.rout}</td>
                 <td>{user.cost}</td>

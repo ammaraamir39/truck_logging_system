@@ -5,17 +5,16 @@ import { useHistory } from "react-router-dom";
 const AddUser = () => {
   let history = useHistory();
   const [user, setUser] = useState({
-    name: "",
-    email: "",  
+    driverName: "",  
     no: "",
-    city: "",
+    vehicleNumber:"",
     vehicleType: "",
     rout: "",
     cost: "",
     status: ""
   });
 
-  const { name, email, no, city, vehicleType, rout, cost, status } = user;
+  const { driverName, no, vehicleNumber, vehicleType, rout, cost, status } = user;
   const onInputChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -37,38 +36,30 @@ const AddUser = () => {
         <div className="form-floating mb-3">
         <input type="text" class="form-control" id="floatingInput" 
         placeholder="name@example.com"
-        name="name"
-        value={name}
+        name="driverName"
+        value={driverName}
         onChange={e => onInputChange(e)}
         />
-        <label for="floatingInput">Enter Name</label>
+        <label for="floatingInput">Enter Driver Name</label>
+        </div>
+        
+        <div className="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" 
+          placeholder="phone"
+          name="no"
+          value={no}
+          onChange={e => onInputChange(e)}
+          />
+          <label for="floatingInput">Enter Your Phone Number</label>
         </div>
         <div className="form-floating mb-3">
-        <input type="email" class="form-control" id="floatingPassword" 
-        placeholder="Password"
-        name="email"
-        value={email}
-        onChange={e => onInputChange(e)}
-        />
-        <label for="floatingPassword">Enter Your E-mail Address</label>
-        </div>
-        <div className="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInput" 
-        placeholder="phone"
-        name="no"
-        value={no}
-        onChange={e => onInputChange(e)}
-        />
-        <label for="floatingInput">Enter Your Phone Number</label>
-        </div>
-        <div className="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingPassword" 
-        placeholder="city"
-        name="city"
-        value={city}
-        onChange={e => onInputChange(e)} 
-        />
-        <label for="floatingPassword">Enter Your City</label>
+          <input type="text" class="form-control" id="floatingPassword" 
+          placeholder="Vehicle Number"
+          name="vehicleNumber"
+          value={vehicleNumber}
+          onChange={e => onInputChange(e)} 
+          />
+          <label for="floatingInput">Enter Your Vehicle Number</label>
         </div>
         <div className="form-floating mb-3">
         <input type="text" class="form-control" id="floatingPassword" 

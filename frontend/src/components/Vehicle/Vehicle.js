@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import axios from "../../axios";
+import {get} from "../../axios";
 
 const User = () => {
   const [user, setUser] = useState({
-    name: "",
-    email: "",  
+    driverName: "",
     no: "",
-    city: "",
+    vehicleNumber:"",
     vehicleType: "",
     rout: "",
     cost: "",
@@ -18,7 +17,7 @@ const User = () => {
     loadUser();
   }, []);
   const loadUser = async () => {
-    const res = await axios.get(`/registerVehicle/${id}`);
+    const res = await get(`/registerVehicle/${id}`);
     setUser(res.data);
   };
   return (
@@ -29,10 +28,10 @@ const User = () => {
       <h1 className="display-4">Requested Vehicle User Info For: {user.name}</h1>
       <hr />
       <ul className="list-group">
-        <li className="list-group-item">name: {user.name}</li>
-        <li className="list-group-item">email: {user.email}</li>
+        <li className="list-group-item">name: {user.driverName}</li>
+        {/* <li className="list-group-item">email: {user.email}</li> */}
         <li className="list-group-item">phone: {user.no}</li>
-        <li className="list-group-item">City: {user.city}</li>
+        <li className="list-group-item">City: {user.vehicleNumber}</li>
         <li className="list-group-item">Vehicle Type: {user.vehicleType}</li>
         <li className="list-group-item">Route For Vehicle: {user.rout}</li>
         <li className="list-group-item">Cost: {user.cost}</li>

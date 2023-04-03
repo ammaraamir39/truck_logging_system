@@ -19,7 +19,9 @@ var jwtAuth = (req, res, next) => {
   })
 }
 // Async-Await
-router.post("/", jwtAuth,async (req, res) => {
+router.post("/", 
+  jwtAuth,  
+  async (req, res) => {
 
   const { driverName , no,vehicleNumber, vehicleType, rout, cost, status} = req.body;
   if ( !vehicleType || !driverName || !vehicleNumber || !rout || !cost)  {
@@ -45,7 +47,9 @@ router.post("/", jwtAuth,async (req, res) => {
 });
 
 
-router.get("/:id",jwtAuth ,async (req, res) => {
+router.get("/:id",
+  jwtAuth ,
+  async (req, res) => {
     try {
       const data = await Vehicle.findById(req.params.id);
       res.status(200).json(data);
@@ -56,27 +60,33 @@ router.get("/:id",jwtAuth ,async (req, res) => {
 
 
 
-router.patch("/updateVehicle",jwtAuth ,async (req, res) => {
-  const { name, email, no, city, vehicleType, rout, cost, status} = req.body;
+router.patch("/updateVehicle",
+  jwtAuth ,
+  async (req, res) => {
+  const { driverName,  no,  vehicleType, vehicleNumber ,rout, cost, status} = req.body;
   try {
-    const vehicleExist = await Vehicle.findOne({ email:email })
+    const vehicleExist = await Vehicle.findOne({ vehicleNumber })
     // console.log(userExist);
 
     if(vehicleExist) {
       const key = vehicleExist._id;
       // console.log(key);
-       const updatevehicle = new Vehicle({ name, email, no, city, vehicleType, rout, cost, status});
-      Vehicle.findByIdAndUpdate(key, {name: req.body.name,
-      email: req.body.email, no: req.body.no, city: req.body.city, vehicleType: req.body.vehicleType, rout: req.body.rout, cost: req.body.cost, status: req.body.status}).then(() => 
+       const updatevehicle = new Vehicle({ driverName,  no, vehicleNumber, vehicleType, rout, cost, status});
+      Vehicle.findByIdAndUpdate(key, {driverName: req.body.driverName,
+       no: req.body.no, vehicleNumber: req.body.vehicleNumber, vehicleType: req.body.vehicleType, rout: req.body.rout, cost: req.body.cost, status: req.body.status}).then(() => 
       {res.status(200).json({message: "Vehicle Update succesfully..."});
       })
     }
   }
   catch(err) {
+    console.log("Error in updating vehicle => ",err)
+    res.status(500).json({error:err})
   }
 })
 
-router.get("/", jwtAuth,async (req, res) => {
+router.get("/", 
+jwtAuth,
+async (req, res) => {
   try {
     const data = await Vehicle.find();
     res.status(200).json(data);
@@ -85,7 +95,9 @@ router.get("/", jwtAuth,async (req, res) => {
 }
 })
 
-router.delete('/:id', jwtAuth,async (req, res) => {
+router.delete('/:id', 
+jwtAuth,
+async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);

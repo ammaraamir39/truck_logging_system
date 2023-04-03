@@ -1,86 +1,131 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../axios";
+import {get,put} from "../../axios"
 import { useHistory, useParams } from "react-router-dom";
 
-const EditUser = () => {
+const EditVehicle = () => {
   let history = useHistory();
   const { id } = useParams();
   const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    details: ""
+    driverName: "",  
+    no: "",
+    vehicleNumber:"",
+    vehicleType: "",
+    rout: "",
+    cost: "",
+    status: ""
   });
 
-  const { name, email, phone, details } = user;
+  useEffect(()=>{
+    const fetchVehicles=async()=>{
+      let vehicle = await get(`/registerVehicle/${id}`) 
+      console.log("Vehicle ",vehicle)
+      if(vehicle){
+        setUser({
+          driverName: vehicle.driverName,  
+          no: vehicle.no,
+          vehicleNumber:vehicle.vehicleNumber,
+          vehicleType: vehicle.vehicleType,
+          rout: vehicle.rout,
+          cost: vehicle.cost,
+          status: vehicle.status
+        }) 
+      }
+    }
+
+    fetchVehicles()
+
+  },[id])
+
+  const { driverName, no, vehicleNumber, vehicleType, rout, cost, status } = user;
   const onInputChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    loadUser();
-  }, []);
-
   const onSubmit = async e => {
     e.preventDefault();
-    await axios.put(`/users/${id}`, user);
-    history.push("/");
-  };
-
-  const loadUser = async () => {
-    const result = await axios.get(`/users/${id}`);
-    setUser(result.data);
+    await put("/registerVehicle/updateVehicle", user);
+    history.push("/VehicleHome");
   };
   return (
+    
     <div className="container">
+     
       <div className="w-75 mx-auto shadow p-5">
-        <h2 className="text-center mb-4">Edit A User</h2>
+      
+        <h2 className="text-center mb-4">Add A Vehicle</h2>
         <form onSubmit={e => onSubmit(e)}>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Enter Your Name"
-              name="name"
-              value={name}
-              onChange={e => onInputChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="email"
-              className="form-control form-control-lg"
-              placeholder="Enter Your E-mail Address"
-              name="email"
-              value={email}
-              onChange={e => onInputChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Enter Your Phone Number"
-              name="phone"
-              value={phone}
-              onChange={e => onInputChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Enter Your details"
-              name="details"
-              value={details}
-              onChange={e => onInputChange(e)}
-            />
-          </div>
-          <button className="btn btn-warning btn-block">Update User</button>
+
+        <div className="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" 
+        placeholder="name@example.com"
+        name="driverName"
+        value={driverName}
+        onChange={e => onInputChange(e)}
+        />
+        <label for="floatingInput">Enter Driver Name</label>
+        </div>
+        
+        <div className="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" 
+          placeholder="phone"
+          name="no"
+          value={no}
+          onChange={e => onInputChange(e)}
+          />
+          <label for="floatingInput">Enter Your Phone Number</label>
+        </div>
+        <div className="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingPassword" 
+          placeholder="Vehicle Number"
+          name="vehicleNumber"
+          value={vehicleNumber}
+          onChange={e => onInputChange(e)} 
+          />
+          <label for="floatingInput">Enter Your Vehicle Number</label>
+        </div>
+        <div className="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingPassword" 
+        placeholder="type"
+        name="vehicleType"
+        value={vehicleType}
+        onChange={e => onInputChange(e)} 
+        />
+        <label for="floatingPassword">Enter Your Veicle Type</label>
+        </div>
+        <div className="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingPassword" 
+        placeholder="rout"
+        name="rout"
+        value={rout}
+        onChange={e => onInputChange(e)} 
+        />
+        <label for="floatingPassword">Enter Your Route</label>
+        </div>
+        <div className="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingPassword" 
+        placeholder="cost"
+        name="cost"
+        value={cost}
+        onChange={e => onInputChange(e)} 
+        />
+        <label for="floatingPassword">Enter Your Cost</label>
+        </div>
+        <div className="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingPassword" 
+        placeholder="status"
+        name="status"
+        value={status}
+        onChange={e => onInputChange(e)} 
+        />
+        <label for="floatingPassword">Enter Status (Available or not)</label>
+        </div>
+        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button type="submit" className="btn btn-light" onClick= {onSubmit}>Update Vehicle</button>
+        </div>
         </form>
       </div>
     </div>
   );
 };
 
-export default EditUser;
+export default EditVehicle;

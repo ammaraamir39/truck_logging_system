@@ -53,7 +53,9 @@ router.post("/", async (req, res) => {
     }
   });
 
-  router.patch("/updateUser", jwtAuth,async (req, res) => {
+  router.patch("/updateUser", 
+  jwtAuth,
+  async (req, res) => {
     const {name, email, details, no,} = req.body;
     try {
       const userExist = await User.findOne({ email:email })
@@ -73,7 +75,9 @@ router.post("/", async (req, res) => {
     }
   })
 
-  router.get("/", jwtAuth,async (req, res) => {
+  router.get("/", 
+  jwtAuth,
+  async (req, res) => {
     try {
       const data = await User.find();
       res.status(200).json(data);
@@ -82,7 +86,9 @@ router.post("/", async (req, res) => {
   }
   })
 
-  router.get("/:id", jwtAuth,async (req, res) => {
+  router.get("/:id", 
+  jwtAuth,
+  async (req, res) => {
     try {
         const data = await User.findById(req.params.id);
         res.status(200).json(data);
