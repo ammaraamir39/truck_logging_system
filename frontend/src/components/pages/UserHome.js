@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../axios";
+import {get,del} from "../../axios";
 import { Link, NavLink } from "react-router-dom";
 
 const Home = () => {
   const [users, setUser] = useState([]);
+
+  // const headers = {
+  //   'Content-Type': 'application/json',
+  //   'authorization': localStorage.getItem('accessToken')
+  // }
 
   useEffect(() => {
     loadUsers();
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get("/registerUser");
-    setUser(result.data.reverse());
+    const result = await get("/registerUser");
+    setUser(result?.reverse());
   };
 
   const deleteUser = async id => {
-    await axios.delete(`/registerUser/${id}`);
+    await del(`/registerUser/${id}`);
     loadUsers();
   };
 
   return (
     <div className="container">
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <NavLink class="btn btn-light" exact to="/VehicleHome" role="button">Go To Vehicle Page</NavLink>
-      <NavLink class="btn btn-light" exact to="/users/add" role="button">Add User Request</NavLink>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end" style={{marginTop:'10px'}}>
+      <NavLink class="btn btn-dark" exact to="/VehicleHome" role="button">Go To Vehicle Page</NavLink>
+      <NavLink class="btn btn-dark" exact to="/users/add" role="button">Add User Request</NavLink>
       </div>
       <div className="py-4">
         <h1>User Page</h1>
@@ -38,19 +43,19 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {users?.map((user, index) => (
               <tr>
                 <th scope="row">{index + 1}</th>
-                <td>{user.name}</td>
-                <td>{user.details}</td>
-                <td>{user.no}</td>
+                <td>{user?.name}</td>
+                <td>{user?.details}</td>
+                <td>{user?.no}</td>
                 <td>
                   <Link class="btn btn-primary mr-2" to={`/users/display/${user._id}`}>
                     View
                   </Link>
                   <Link
                     class="btn btn-outline-primary mr-2"
-                    to={`users/add`}
+                    to={`users/edit/${user._id}`}
                   >
                     Edit
                   </Link>

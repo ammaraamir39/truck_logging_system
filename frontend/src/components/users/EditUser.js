@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../axios";
+import {get,put} from "../../axios";
 import { useHistory, useParams } from "react-router-dom";
+import {  toast } from 'react-toastify';
+
 
 const EditUser = () => {
   let history = useHistory();
@@ -8,11 +10,11 @@ const EditUser = () => {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    phone: "",
+    no: "",
     details: ""
   });
 
-  const { name, email, phone, details } = user;
+  const { name, email, no, details } = user;
   const onInputChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -22,21 +24,32 @@ const EditUser = () => {
   }, []);
 
   const onSubmit = async e => {
-    e.preventDefault();
-    await axios.put(`/users/${id}`, user);
-    history.push("/");
+    try {
+      e.preventDefault();
+      await put(`/registerUser/updateUser`, user);
+      toast.success('User updated successfully')
+      history.push("/");  
+    } catch (error) {
+      toast.error('Error updating user')
+    }
+    
   };
 
   const loadUser = async () => {
-    const result = await axios.get(`/users/${id}`);
-    setUser(result.data);
+    const result = await get(`/registerUser/${id}`);
+    setUser({
+      name :result.name ?  result.name : "",
+      email : result.email ? result.email : "",
+      no : result.no ? result.no : "",
+      details: result.details ? result.details : ""
+    });
   };
   return (
     <div className="container">
       <div className="w-75 mx-auto shadow p-5">
         <h2 className="text-center mb-4">Edit A User</h2>
         <form onSubmit={e => onSubmit(e)}>
-          <div className="form-group">
+          <div className="form-group" style={{marginBottom: '10px'}}>
             <input
               type="text"
               className="form-control form-control-lg"
@@ -46,7 +59,7 @@ const EditUser = () => {
               onChange={e => onInputChange(e)}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{marginBottom: '10px'}}>
             <input
               type="email"
               className="form-control form-control-lg"
@@ -56,17 +69,17 @@ const EditUser = () => {
               onChange={e => onInputChange(e)}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{marginBottom: '10px'}}>
             <input
               type="text"
               className="form-control form-control-lg"
               placeholder="Enter Your Phone Number"
-              name="phone"
-              value={phone}
+              name="no"
+              value={no}
               onChange={e => onInputChange(e)}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{marginBottom: '10px'}}>
             <input
               type="text"
               className="form-control form-control-lg"

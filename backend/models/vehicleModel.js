@@ -10,13 +10,15 @@ const vehicleSchema = new mongoose.Schema({
     },
  
     no: {
-        type:String,  
+        type:String, 
+         
     },
     vehicleType: {
         type: String
     },
     vehicleNumber:{
-        type:String
+        type:String,
+        unique:true
     },
 
     rout: {

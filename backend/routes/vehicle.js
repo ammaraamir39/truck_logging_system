@@ -7,8 +7,9 @@ const jwt = require("jsonwebtoken");
 
 
 var jwtAuth = (req, res, next) => {
+  console.log("Req.headers = > ",req.headers)
   var token = req.headers.authorization;
-  
+  if(!token) return res.status(401).send({message:"Token not found"})
   jwt.verify(token, process.env.SECRET_KEY, function(err, decoded){
     if(err){
       res.status(401).json("invalid tokken")
@@ -25,24 +26,28 @@ router.post("/",
 
   const { driverName , no,vehicleNumber, vehicleType, rout, cost, status} = req.body;
   if ( !vehicleType || !driverName || !vehicleNumber || !rout || !cost)  {
-    return res.status(422).json({error:"filled all the fields"});
+    return res.status(422).json({message:"filled all the fields"});
   }
 
   try {
 
+      const vehicle =await Vehicle.findOne({vehicleNumber})
+      console.log("Vehicle = > ",vehicle)
+      if(vehicle) return res.status(200).json({message:"vehicle already exists"})
       const newVehicle = new Vehicle({ driverName, no, vehicleType, vehicleNumber,rout, cost, status});
 
       const vehicleRegister = await newVehicle.save();
      
   
       if(vehicleRegister) {
-        res.status(200).json({message: "Vehicle registerd succesfully..."});
+        res.status(200).json({message: "Vehicle registerd succesfully...",status:true});
       } else {
-        res.status(500).json({error: "Failed to register"})
+        res.status(500).json({message: "Failed to register",status:false})
       }
 
   } catch(err) {
-    console.log(err);
+    console.log("error",err.message);
+    res.status(400).json({message:"err.message"})
   }
 });
 
@@ -54,13 +59,13 @@ router.get("/:id",
       const data = await Vehicle.findById(req.params.id);
       res.status(200).json(data);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({message:err.message});
     }
 });
 
 
 
-router.patch("/updateVehicle",
+router.put("/updateVehicle",
   jwtAuth ,
   async (req, res) => {
   const { driverName,  no,  vehicleType, vehicleNumber ,rout, cost, status} = req.body;
@@ -74,13 +79,13 @@ router.patch("/updateVehicle",
        const updatevehicle = new Vehicle({ driverName,  no, vehicleNumber, vehicleType, rout, cost, status});
       Vehicle.findByIdAndUpdate(key, {driverName: req.body.driverName,
        no: req.body.no, vehicleNumber: req.body.vehicleNumber, vehicleType: req.body.vehicleType, rout: req.body.rout, cost: req.body.cost, status: req.body.status}).then(() => 
-      {res.status(200).json({message: "Vehicle Update succesfully..."});
+      {res.status(200).json({message: "Vehicle Update succesfully...",status:true});
       })
     }
   }
   catch(err) {
     console.log("Error in updating vehicle => ",err)
-    res.status(500).json({error:err})
+    res.status(500).json({message:err.message,status:false})
   }
 })
 
@@ -91,7 +96,7 @@ async (req, res) => {
     const data = await Vehicle.find();
     res.status(200).json(data);
 } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({message:err.message});
 }
 })
 

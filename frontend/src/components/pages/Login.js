@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "../../axios";
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 
 import '../../App.css';
-import {
-  FacebookLoginButton,
-  InstagramLoginButton
-} from "react-social-login-buttons";
 
 class Login extends Component {
   constructor() {

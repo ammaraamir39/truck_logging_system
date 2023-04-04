@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../axios";
+import {get,del} from "../../axios";
 import { Link, NavLink } from "react-router-dom";
 
 const Home = () => {
@@ -10,20 +10,20 @@ const Home = () => {
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get("/registerVehicle");
-    setUser(result.data.reverse());
+    const result = await get("/registerVehicle");
+    setUser(result?.reverse());
   };
 
   const deleteUser = async id => {
-    await axios.delete(`/registerVehicle/${id}`);
+    await del(`/registerVehicle/${id}`);
     loadUsers();
   };
 
   return (
     <div className="container">
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <NavLink class="btn btn-light" exact to="/UserHome" role="button">Go To User Page</NavLink>
-      <NavLink class="btn btn-light" exact to="/vehicle/add" role="button">Add Vehicle Request</NavLink>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end" style={{marginTop:'10px'}}>
+      <NavLink class="btn btn-dark" exact to="/UserHome" role="button">Go To User Page</NavLink>
+      <NavLink class="btn btn-dark" exact to="/vehicle/add" role="button">Add Vehicle Request</NavLink>
       </div>
       <div className="py-4">
         <h1>Vehicle Page</h1>
@@ -58,7 +58,7 @@ const Home = () => {
                   </Link>
                   <Link
                     class="btn btn-outline-primary "
-                    to={`vehicle/add`}
+                    to={`vehicle/edit/${user._id}`}
                   >
                     Edit
                   </Link>

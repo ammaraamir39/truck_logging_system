@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from '../../axios'
+import {post} from '../../axios'
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddUser = () => {
   let history = useHistory();
@@ -20,9 +21,25 @@ const AddUser = () => {
   };
 
   const onSubmit = async e => {
-    e.preventDefault();
-    await axios.patch("/registerVehicle/updateVehicle", user);
-    history.push("/VehicleHome");
+    try {
+      
+      e.preventDefault();
+      let vehicle = await post("/registerVehicle", user);
+      // console.log("Vehicle = > ",vehicle)
+      if(!vehicle.status) {
+        console.log("Vehicle message = > ",vehicle.message)
+        alert(vehicle.message)
+      }else{
+        toast.success('Vehicle Added Successfully!!')
+        history.push("/VehicleHome");
+        setTimeout(()=>{
+        history.push("/VehicleHome")
+          } ,1000)
+      }
+      
+    } catch (error) {
+      toast.error(error.message)
+    }
   };
   return (
     

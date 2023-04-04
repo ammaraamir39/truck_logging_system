@@ -63,10 +63,10 @@ function Navbar() {
               token ? (
                 <li className='nav-item'>
               <Link
-                to='/vehicle'
+                to='/VehicleHome'
                 className="nav-links"
                 onClick={closeMobileMenu}>
-                  Add Vehicle With Us
+                  Vehicles
                 </Link> </li> ) : (
                   <></>
                 )

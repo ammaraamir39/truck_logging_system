@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {get,put} from "../../axios"
 import { useHistory, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditVehicle = () => {
   let history = useHistory();
@@ -21,13 +22,13 @@ const EditVehicle = () => {
       console.log("Vehicle ",vehicle)
       if(vehicle){
         setUser({
-          driverName: vehicle.driverName,  
-          no: vehicle.no,
-          vehicleNumber:vehicle.vehicleNumber,
-          vehicleType: vehicle.vehicleType,
-          rout: vehicle.rout,
-          cost: vehicle.cost,
-          status: vehicle.status
+          driverName: vehicle.driverName ? vehicle.driverName : "",  
+          no: vehicle.no ? vehicle.no : "",
+          vehicleNumber:vehicle.vehicleNumber ? vehicle.vehicleNumber : "",
+          vehicleType: vehicle.vehicleType ? vehicle.vehicleType : "",
+          rout: vehicle.rout ? vehicle.rout : "",
+          cost: vehicle.cost ? vehicle.cost : "",
+          status: vehicle.status ? vehicle.status : "",
         }) 
       }
     }
@@ -42,9 +43,19 @@ const EditVehicle = () => {
   };
 
   const onSubmit = async e => {
-    e.preventDefault();
-    await put("/registerVehicle/updateVehicle", user);
-    history.push("/VehicleHome");
+    try {
+      
+      e.preventDefault();
+      await put("/registerVehicle/updateVehicle", user);
+      toast.success("Succefully Updated Vehicle")
+      setTimeout(()=>{
+
+        history.push("/VehicleHome");
+      },500)
+    } catch (error) {
+      console.log("Error in updating vehicle = > ",error)
+      toast.error(error.message)
+    }
   };
   return (
     
