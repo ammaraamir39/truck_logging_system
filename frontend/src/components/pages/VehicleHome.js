@@ -15,6 +15,7 @@ const Home = () => {
   };
 
   const deleteUser = async id => {
+    console.log("Id = > ",id)
     await del(`/registerVehicle/${id}`);
     loadUsers();
   };

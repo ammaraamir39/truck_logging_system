@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {get,del} from "../../axios";
+import {get,del, post} from "../../axios";
 import { Link, NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [users, setUser] = useState([]);
@@ -19,8 +20,9 @@ const Home = () => {
     setUser(result?.reverse());
   };
 
-  const deleteUser = async id => {
-    await del(`/registerUser/${id}`);
+  const deleteUser = async (email) => {
+    let deleteUser = await post(`/registerUser/deleteUser`,{email});
+    toast.success(deleteUser.message)
     loadUsers();
   };
 
@@ -61,7 +63,7 @@ const Home = () => {
                   </Link>
                   <Link
                     class="btn btn-danger mr-2"
-                    onClick={() => deleteUser(user._id)}
+                    onClick={() => deleteUser(user.email)}
                   >
                     Delete
                   </Link>

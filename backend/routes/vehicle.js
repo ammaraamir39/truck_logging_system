@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Vehicle = require("../models/vehicleModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sanitize = require("mongo-sanitize");
 
 
 
@@ -31,9 +32,9 @@ router.post("/",
 
   try {
 
-      const vehicle =await Vehicle.findOne({vehicleNumber})
+      const vehicle =await Vehicle.findOne({vehicleNumber:String(vehicleNumber)})
       console.log("Vehicle = > ",vehicle)
-      if(vehicle) return res.status(200).json({message:"vehicle already exists"})
+      if(vehicle) return res.status(200).json({message:"vehicle already exists",status:false})
       const newVehicle = new Vehicle({ driverName, no, vehicleType, vehicleNumber,rout, cost, status});
 
       const vehicleRegister = await newVehicle.save();
@@ -47,7 +48,7 @@ router.post("/",
 
   } catch(err) {
     console.log("error",err.message);
-    res.status(400).json({message:"err.message"})
+    res.status(400).json({message:"Failed to register vehicle",status:false})
   }
 });
 
@@ -56,7 +57,8 @@ router.get("/:id",
   jwtAuth ,
   async (req, res) => {
     try {
-      const data = await Vehicle.findById(req.params.id);
+      let vehicleId = sanitize(req.params.id)
+      const data = await Vehicle.findById(vehicleId);
       res.status(200).json(data);
     } catch (err) {
       res.status(500).json({message:err.message});
@@ -66,21 +68,25 @@ router.get("/:id",
 
 
 router.put("/updateVehicle",
-  jwtAuth ,
+  // jwtAuth ,
   async (req, res) => {
   const { driverName,  no,  vehicleType, vehicleNumber ,rout, cost, status} = req.body;
   try {
-    const vehicleExist = await Vehicle.findOne({ vehicleNumber })
+    //easily accessible and vulnerable 
+    // const vehicleExist = await Vehicle.findOne({ vehicleNumber })
     // console.log(userExist);
-
+    const vehicleExist = await Vehicle.findOne({ vehicleNumber : String(vehicleNumber)})
+    console.log("VehilceExist = > ",vehicleExist)
     if(vehicleExist) {
       const key = vehicleExist._id;
       // console.log(key);
-       const updatevehicle = new Vehicle({ driverName,  no, vehicleNumber, vehicleType, rout, cost, status});
+
       Vehicle.findByIdAndUpdate(key, {driverName: req.body.driverName,
        no: req.body.no, vehicleNumber: req.body.vehicleNumber, vehicleType: req.body.vehicleType, rout: req.body.rout, cost: req.body.cost, status: req.body.status}).then(() => 
       {res.status(200).json({message: "Vehicle Update succesfully...",status:true});
       })
+    }else{
+      res.status(200).json({message:"Vehicle Not updated",status:false})
     }
   }
   catch(err) {

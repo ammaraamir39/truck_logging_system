@@ -25,16 +25,16 @@ const AddUser = () => {
       
       e.preventDefault();
       let vehicle = await post("/registerVehicle", user);
-      // console.log("Vehicle = > ",vehicle)
+      console.log("Vehicle = > ",vehicle)
       if(!vehicle.status) {
         console.log("Vehicle message = > ",vehicle.message)
         alert(vehicle.message)
       }else{
         toast.success('Vehicle Added Successfully!!')
         history.push("/VehicleHome");
-        setTimeout(()=>{
-        history.push("/VehicleHome")
-          } ,1000)
+        // setTimeout(()=>{
+        // history.push("/VehicleHome")
+        //   } ,1000)
       }
       
     } catch (error) {
